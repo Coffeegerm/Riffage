@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "826560537005",
+    "project_id": "riffage-d4824",
+    "storage_bucket": "riffage-d4824.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826560537005:android:a9a880d7188f72c9670124",
+        "android_client_info": {
+          "package_name": "com.riffage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826560537005-jj46tn4cbpo2dovqsaft7v0qoimnhe21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCW2SHyk2CuUF-OzIKHa4VoxdABRdp-mK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826560537005-jj46tn4cbpo2dovqsaft7v0qoimnhe21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
