@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { Input, Text, Button, Card } from "react-native-elements";
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSet,
-  AudioSourceAndroidType,
-} from "react-native-audio-recorder-player";
+import { useAudioRecorder } from "../hooks/useAudioRecorder";
 
 export const HomeScreen = ({ navigation }) => {
-  let audioRecorderPlayer = new AudioRecorderPlayer();
   const [name, setName] = useState("");
-  const [audioState, setAudioState] = useState({
-    recordSecs: 0,
-    recordTime: "00:00:00",
-    currentPositionSec: 0,
-    currentDurationSec: 0,
-    playTime: "00:00:00",
-    duration: "00:00:00",
-  });
+
+  const {
+    onStartRecord,
+    audioState,
+    onStopRecord,
+    onPausePlay,
+    onStopPlay,
+    onStartPlay,
+  } = useAudioRecorder();
+
   return (
     <Card
       containerStyle={{
@@ -37,18 +32,20 @@ export const HomeScreen = ({ navigation }) => {
           style={{ width: "100%" }}
           placeholder="Name"
         />
-        <Button title="Record" />
+        <Text style={{ textAlign: "center" }}>{audioState.recordTime}</Text>
+        <Button title="Record" onPress={onStartRecord} />
+        <Button title="Stop" onPress={onStopRecord} />
       </View>
 
       <View>
         <Text style={{ textAlign: "center" }}>
           {audioState.playTime} / {audioState.duration}
         </Text>
-        <Button title="Play" />
-        <Button title="Pause" />
-        <Button title="Stop" />
+        <Button title="Play" onPress={onStartPlay} />
+        <Button title="Pause" onPress={onPausePlay} />
+        <Button title="Stop" onPress={onStopPlay} />
       </View>
-      
+
       <Button
         title="History"
         onPress={() => {
