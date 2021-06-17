@@ -6,6 +6,8 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType,
 } from "react-native-audio-recorder-player";
+import RNFetchBlob from "rn-fetch-blob";
+import { Platform } from "react-native";
 
 export const useAudioRecorder = () => {
   // create ref for recorder on creation
@@ -25,6 +27,16 @@ export const useAudioRecorder = () => {
     isPlaying: false,
   });
 
+  const getPath = () => {
+    const dirs = RNFetchBlob.fs.dirs;
+    return Platform.select({
+      ios: "localRiffageFile.m4a",
+      android: `${dirs.CacheDir}/localRiffageFile.mp3`,
+    });
+  };
+
+  const path = getPath();
+
   // start recording into audio controller
   const onStartRecord = async () => {
     // make sure we have player created and that we are not recording already
@@ -33,7 +45,6 @@ export const useAudioRecorder = () => {
       audioState.isRecording === false &&
       audioState.isPlaying === false
     ) {
-      const path = "hello.m4a";
       const audioSet = {
         AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
         AudioSourceAndroid: AudioSourceAndroidType.MIC,
@@ -50,7 +61,7 @@ export const useAudioRecorder = () => {
         setAudioState({
           ...audioState,
           recordSecs: e.current_position,
-          recordTime: audioRecorderPlayer.mmssss(
+          recordTime: audioRecorderPlayer.current.mmss(
             Math.floor(e.current_position)
           ),
           isRecording: true,
@@ -81,23 +92,29 @@ export const useAudioRecorder = () => {
       audioState.isRecording === false &&
       audioState.isPlaying === false
     ) {
-      const path = "hello.m4a";
       const msg = await audioRecorderPlayer.current.startPlayer(path);
       audioRecorderPlayer.current.setVolume(1.0);
       console.log(msg);
       audioRecorderPlayer.current.addPlayBackListener((e) => {
         if (e.current_position === e.duration) {
           console.log("finished");
-          audioRecorderPlayer.stopPlayer();
+          audioRecorderPlayer.current.stopPlayer();
+          setAudioState({
+            ...audioState,
+            isPlaying: false,
+          });
+        } else {
+          setAudioState({
+            ...audioState,
+            isPlaying: true,
+            currentPositionSec: e.current_position,
+            currentDurationSec: e.duration,
+            playTime: audioRecorderPlayer.current.mmss(
+              Math.floor(e.current_position)
+            ),
+            duration: audioRecorderPlayer.current.mmss(Math.floor(e.duration)),
+          });
         }
-        setAudioState({
-          ...audioState,
-          isPlaying: true,
-          currentPositionSec: e.current_position,
-          currentDurationSec: e.duration,
-          playTime: audioRecorderPlayer.mmssss(Math.floor(e.current_position)),
-          duration: audioRecorderPlayer.mmssss(Math.floor(e.duration)),
-        });
       });
     }
   };
