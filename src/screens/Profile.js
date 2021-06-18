@@ -5,7 +5,7 @@ import { Divider, Header, Icon, Text } from "react-native-elements";
 import { HistoryItem } from "../components";
 import LinearGradient from "react-native-linear-gradient";
 
-export const History = () => {
+export const Profile = () => {
   const { goBack } = useNavigation();
   return (
     <LinearGradient

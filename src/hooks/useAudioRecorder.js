@@ -8,6 +8,7 @@ import AudioRecorderPlayer, {
 } from "react-native-audio-recorder-player";
 import RNFetchBlob from "rn-fetch-blob";
 import { Platform } from "react-native";
+import { timeUtils } from "../utils";
 
 export const useAudioRecorder = () => {
   // create ref for recorder on creation
@@ -18,11 +19,11 @@ export const useAudioRecorder = () => {
 
   const [audioState, setAudioState] = useState({
     recordSecs: 0,
-    recordTime: "00:00:00",
+    recordTime: "0:00",
     currentPositionSec: 0,
     currentDurationSec: 0,
-    playTime: "00:00:00",
-    duration: "00:00:00",
+    playTime: "0:00",
+    duration: "0:00",
     isRecording: false,
     isPlaying: false,
   });
@@ -61,9 +62,7 @@ export const useAudioRecorder = () => {
         setAudioState({
           ...audioState,
           recordSecs: e.current_position,
-          recordTime: audioRecorderPlayer.current.mmss(
-            Math.floor(e.current_position)
-          ),
+          recordTime: timeUtils.millisToMinutesAndSeconds(e.current_position),
           isRecording: true,
         });
       });
@@ -109,10 +108,8 @@ export const useAudioRecorder = () => {
             isPlaying: true,
             currentPositionSec: e.current_position,
             currentDurationSec: e.duration,
-            playTime: audioRecorderPlayer.current.mmss(
-              Math.floor(e.current_position)
-            ),
-            duration: audioRecorderPlayer.current.mmss(Math.floor(e.duration)),
+            playTime: timeUtils.millisToMinutesAndSeconds(e.current_position),
+            duration: timeUtils.millisToMinutesAndSeconds(e.duration),
           });
         }
       });

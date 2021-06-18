@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Input, Text, Button, Header, Icon } from "react-native-elements";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import { Input, Text, Header, Icon } from "react-native-elements";
+import { Button } from "../components";
 import { useAudioRecorder } from "../hooks/useAudioRecorder";
 import { Buttons } from "../styles";
+import LinearGradient from "react-native-linear-gradient";
 
 const styles = StyleSheet.create({
   button: {
@@ -10,13 +12,13 @@ const styles = StyleSheet.create({
   },
   centerText: {
     textAlign: "center",
+    color: "white",
+    fontSize: 40,
   },
   containerStyle: {
     flex: 1,
     alignItems: "stretch",
-    justifyContent: "space-evenly",
     display: "flex",
-    marginHorizontal: 12,
   },
   headerText: {
     textAlign: "center",
@@ -37,40 +39,68 @@ export const HomeScreen = ({ navigation }) => {
   } = useAudioRecorder();
 
   return (
-    <>
-      <Header
-        containerStyle={{ marginVertical: 8, paddingHorizontal: 12 }}
-        rightComponent={
-          <Icon
-            name="history"
-            color="white"
-            size={30}
-            onPress={() => {
-              navigation.navigate("History");
-            }}
-          />
-        }
-        elevated
-      />
-      <View style={styles.containerStyle}>
+    <LinearGradient
+      start={{ x: 1, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      colors={["#3913B8", "#00B7E0"]}
+      style={styles.containerStyle}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginHorizontal: 24,
+          marginTop: 40,
+        }}
+      >
+        <Icon
+          name="account-circle"
+          color="white"
+          size={40}
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
+        />
+        <Icon
+          name="history"
+          color="white"
+          size={40}
+          onPress={() => {
+            navigation.navigate("History");
+          }}
+        />
+      </View>
+      <View style={{ flex: 1, justifyContent: "space-around" }}>
         <View>
-          <Text style={styles.headerText}>Riffage</Text>
+          <Text style={styles.centerText}>{audioState.recordTime}</Text>
           <Input
             value={name}
             onChangeText={setName}
             style={{ width: "100%" }}
+            inputContainerStyle={{ color: "white" }}
+            inputStyle={{ color: "white" }}
+            placeholderTextColor="white"
             placeholder="Riff name"
           />
-          <Text style={styles.centerText}>{audioState.recordTime}</Text>
           <Button
-            title="Record"
             onPress={onStartRecord}
-            containerStyle={styles.button}
+            iconName="fiber-manual-record"
+            iconColor={audioState.isRecording ? "red" : "white"}
+            height={80}
+            width="90%"
+            gradientColors={["#8352FD", "#2FB5FC"]}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 0 }}
           />
           <Button
-            title="Stop"
             onPress={onStopRecord}
-            containerStyle={styles.button}
+            iconName="stop"
+            iconColor="white"
+            height={80}
+            width="90%"
+            gradientColors={["#8352FD", "#2FB5FC"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
           />
         </View>
 
@@ -78,23 +108,32 @@ export const HomeScreen = ({ navigation }) => {
           <Text style={styles.centerText}>
             {audioState.playTime} / {audioState.duration}
           </Text>
-          <Button
-            title="Play"
-            onPress={onStartPlay}
-            containerStyle={styles.button}
-          />
-          <Button
-            title="Pause"
-            onPress={onPausePlay}
-            containerStyle={styles.button}
-          />
-          <Button
-            title="Stop"
-            onPress={onStopPlay}
-            containerStyle={styles.button}
-          />
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <Button
+              onPress={onStartPlay}
+              iconName="play-arrow"
+              iconColor="white"
+              height={100}
+              width="200%"
+              gradientColors={["#2FB5FC", "#8352FD"]}
+              start={{ x: 1, y: 1 }}
+              end={{ x: 0, y: 1 }}
+            />
+            <Button
+              onPress={onPausePlay}
+              iconName="stop"
+              iconColor="white"
+              height={100}
+              width="200%"
+              gradientColors={["#2FB5FC", "#8352FD"]}
+              start={{ x: 1, y: 0 }}
+              end={{ x: 0, y: 1 }}
+            />
+          </View>
         </View>
       </View>
-    </>
+    </LinearGradient>
   );
 };
